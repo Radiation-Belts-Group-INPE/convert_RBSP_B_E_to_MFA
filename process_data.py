@@ -2,6 +2,8 @@
 import speasy as spz
 from speasy.core.inventory import *
 from convert_coordinates2 import *
+from PyEMD import EMD
+import matplotlib.pyplot as plt
 # %%
 cda_tree = spz.inventories.tree.cda
 
@@ -41,4 +43,30 @@ n_plot = 5000
 fig = converter.visualize_detrending(
     b_gsm[:], time_mag[:]
 )
+# %%
+
+
+s = b_gsm[17000:18200,1]
+t = np.linspace(0,1,len(s))
+IMF = EMD().emd(s,t)
+
+
+
+N = IMF.shape[0]+1
+
+#%%
+
+plt.subplot(N,1,1)
+
+
+plt.plot(t, s, 'r')
+plt.xlabel("Time [s]")
+
+for n, imf in enumerate(IMF):
+    plt.subplot(N,1,n+2)
+    plt.plot(t, imf, 'g')
+    plt.title("IMF "+str(n+1))
+    plt.xlabel("Time [s]")
+
+plt.tight_layout()
 # %%
